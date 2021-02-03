@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>二次贝塞尔曲线——路径动画</title>
+    <link rel="stylesheet" href="../styles/index.css">
+
+</head>
+<body>
+<div id="executeButton">执行</div>
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<script>
+</script>
+<script type="module">
+    import Easing from "../utils/Easing.mjs";
+
+
+    function handleExecute() {
+
+        // 计算出子控制点的坐标
+        function calSC(t) {
+            SC.x = p0.x + (p1.x - p0.x) * t
+            SC.y = p0.y + (p1.y - p0.y) * t
+        }
+
+        // 计算出子贝塞尔曲线的终点
+        function calB(t) {
+            B.x = Math.pow(1 - t, 2) * p0.x + 2 * t * (1 - t) * p1.x + Math.pow(t, 2) * p2.x
+            B.y = Math.pow(1 - t, 2) * p0.y + 2 * t * (1 - t) * p1.y + Math.pow(t, 2) * p2.y
+        }
+
+
+        const canvas = document.querySelector('#myCanvas')
+        const ctx = canvas.getContext('2d')
+
+        // 设置线条样式
+        ctx.lineWidth = 4
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+
+        // 第一帧执行的时间
+        let startTime;
+        // 期望动画持续的时间
+        const duration = 1000
+
+        // 起点
+        const p0 = {x: 100, y: 500}
+        // 控制点
+        const p1 = {x: 200, y: 100}
+        // 终点
+        const p2 = {x: 700, y: 500}
+        // 子控制点(这里初始化的坐标不重要，先设置成p0的值)
+        const SC = {...p0}
+        // 子贝塞尔曲线上的终点(这里初始化的坐标不重要，先设置成p0的值)
+        let B = {...p0}
+
+        // 先画一条完整的贝塞尔曲线以验证贝塞尔曲线动画的准确性
+        ctx.beginPath()
+        ctx.moveTo(p0.x, p0.y)
+        ctx.strokeStyle = '#e3e3e3'
+        ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y)
+        ctx.stroke()
+
+        // 随便画个眼睛（不重要）
+        function drawEye(color) {
+            ctx.beginPath()
+            ctx.strokeStyle = color
+            ctx.arc(p0.x + 100, p0.y - 50, 50, 0, 2 * Math.PI, false)
+            ctx.stroke()
+            ctx.moveTo(p0.x + 300, p0.y - 50)
+            ctx.arc(p0.x + 250, p0.y - 50, 50, 0, 2 * Math.PI, false)
+            ctx.stroke()
+        }
+
+        drawEye('rgb(227, 227, 227)')
+
+        /*
+        * 动画帧绘制方法.
+        * currentTime是requestAnimation执行回调方法step时会传入的一个执行时的时间(由performance.now()获得).
+        * */
+        const step = (currentTime) => {
+            // 第一帧绘制时记录下开始的时间
+            !startTime && (startTime = currentTime)
+            // 已经过去的时间(ms)
+            const timeElapsed = currentTime - startTime
+            // 动画执行的进度 {0,1}
+            let progress = Math.min(timeElapsed / duration, 1)
+            progress = Easing.Quadratic.In(progress)
+
+            // 绘制方法
+            const draw = () => {
+                ctx.beginPath()
+                ctx.moveTo(p0.x, p0.y)
+
+                // 计算并更新B和SC的坐标
+                calB(progress)
+                calSC(progress)
+
+                // 用贝塞尔曲线将刚刚moveTo中的点连接到B上
+                ctx.quadraticCurveTo(SC.x, SC.y, B.x, B.y)
+                ctx.strokeStyle = `rgba(${171 * (1 - progress) + 81}, ${160 * progress}, ${255},1)`
+                ctx.stroke()
+
+                // 眼睛渐变色
+                drawEye(`rgba(${227 - (227 - 81) * progress}, ${227 - (227 - 160) * progress}, ${255},1)`)
+            }
+            draw()
+
+            if (progress < 1) {
+                requestAnimationFrame(step)
+            } else {
+                console.log('动画执行完毕')
+            }
+        }
+
+        setTimeout(() => {
+            requestAnimationFrame(step)
+        }, 1000)
+    }
+
+    document.querySelector('#executeButton').addEventListener('click', handleExecute)
+</script>
+</body>
+</html>

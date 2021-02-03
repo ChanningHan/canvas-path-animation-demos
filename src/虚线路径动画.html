@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>虚线路径动画</title>
+    <link rel="stylesheet" href="../styles/index.css">
+</head>
+<body>
+<div id="executeButton" onclick="handleExecute()">执行</div>
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<script>
+    function handleExecute() {
+        const canvas = document.querySelector('#myCanvas')
+        const ctx = canvas.getContext('2d')
+
+        // 定义起点和终点的坐标
+        const startX = 100
+        const startY = 100
+        const endX = 700
+        const endY = 700
+
+        // 初始化帧动画绘制中线段两个端点的坐标
+        let prevX, prevY, nextX, nextY
+        prevX  = startX
+        prevY  = startY
+
+        // 第一帧执行的时间
+        let startTime;
+        // 期望动画持续的时间
+        const duration = 1000
+        let count = 0
+
+        const step = (currentTime) => {
+            !startTime && (startTime = currentTime)
+            const timeElapsed = currentTime - startTime
+            const progress = Math.min(timeElapsed / duration, 1)
+
+            // 绘制方法
+            const draw = () => {
+                ctx.beginPath()
+                ctx.moveTo(prevX, prevY)
+
+                // 移动笔触后,计算该次线段绘制的终点,并将prevX/Y更新为此值,给下一次绘制的时候使用
+                prevX = nextX = startX + (endX - startX) * progress
+                prevY = nextY = startY + (endY - startY) * progress
+
+                if (count % 2 === 0) {
+                    // 设置线条样式
+                    ctx.lineWidth = 20 * progress
+                    ctx.strokeStyle = `rgba(${171 * (1 - progress) + 81}, ${160 * progress}, ${255},1)`
+                    ctx.lineTo(nextX, nextY)
+                    ctx.stroke()
+                }
+            }
+            draw()
+
+            if (progress < 1) {
+                count++
+                requestAnimationFrame(step)
+            } else {
+                console.log('动画执行完毕')
+                console.log(`${duration}ms内回调执行次数:${count}次`)
+            }
+        }
+
+        // 向浏览器发送动画执行请求,当浏览器要进行重绘时,会调用我们传入的step方法
+        requestAnimationFrame(step)
+    }
+</script>
+</body>
+</html>

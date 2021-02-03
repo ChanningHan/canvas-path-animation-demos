@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>折线路径动画</title>
+    <link rel="stylesheet" href="../styles/index.css">
+
+</head>
+<body>
+<div id="executeButton">执行</div>
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<script>
+</script>
+<script type="module">
+    import Easing from "../utils/Easing.mjs";
+
+    function handleExecute() {
+        const canvas = document.querySelector('#myCanvas')
+        const ctx = canvas.getContext('2d')
+
+        // 设置线条样式
+        ctx.lineWidth = 7
+        ctx.lineJoin = 'round'
+        ctx.lineCap = 'round'
+
+        // 顺序定义折线上各个转折点的坐标
+        const keyPoints = [
+            {x: 250, y: 200},
+            {x: 550, y: 200},
+            {x: 250, y: 500},
+            {x: 550, y: 500},
+            {x: 250, y: 200}
+        ]
+        let prevX = keyPoints[0].x
+        let prevY = keyPoints[0].y
+        let nextX
+        let nextY
+        // 第一帧执行的时间
+        let startTime;
+        // 期望动画持续的时间
+        const duration = 900
+
+
+        // 动画被切分成若干段,每一段所占总进度的比例
+        const partProportion = 1 / (keyPoints.length - 1)
+        // 缓存绘制第n段线段的n值,为了在进行下一段绘制前把这一段线段的末尾补齐
+        let lineIndexCache = 1
+
+        /*
+        * 动画帧绘制方法.
+        * currentTime是requestAnimation执行回调方法step时会传入的一个执行时的时间(由performance.now()获得).
+        * */
+        const step = (currentTime) => {
+            // 第一帧绘制时记录下开始的时间
+            !startTime && (startTime = currentTime)
+            // 已经过去的时间(ms)
+            const timeElapsed = currentTime - startTime
+            // 动画执行的进度 {0,1}
+            let progress = Math.min(timeElapsed / duration, 1)
+            // 加入二次方缓动函数
+            progress = Easing.Quadratic.In(progress)
+
+            // 描述当前所绘制的是第几段线段
+            const lineIndex = Math.min(Math.floor(progress / partProportion) + 1, keyPoints.length - 1)
+
+            //  当前线段的进度 {0,1}
+            const partProgress = (progress - (lineIndex - 1) * partProportion) / partProportion
+
+            // 绘制方法
+            const draw = () => {
+                ctx.strokeStyle = `rgba(${81 + 175 * Math.abs(1 - progress * 2)}, ${160 - 160 * Math.abs(progress * 2 - 1)}, ${255},${1})`
+                ctx.beginPath()
+                ctx.moveTo(prevX, prevY)
+                // 当绘制下一段线段前,把上一段末尾缺失的部分补齐
+                if (lineIndex !== lineIndexCache) {
+                    ctx.lineTo(keyPoints[lineIndex - 1].x, keyPoints[lineIndex - 1].y)
+                    lineIndexCache = lineIndex
+                }
+                prevX = nextX = ~~(keyPoints[lineIndex - 1].x + ((keyPoints[lineIndex]).x - keyPoints[lineIndex - 1].x) * partProgress)
+                prevY = nextY = ~~(keyPoints[lineIndex - 1].y + ((keyPoints[lineIndex]).y - keyPoints[lineIndex - 1].y) * partProgress)
+                ctx.lineTo(nextX, nextY)
+                ctx.stroke()
+            }
+            draw()
+
+            if (progress < 1) {
+                requestAnimationFrame(step)
+            } else {
+                console.log('动画执行完毕')
+            }
+        }
+
+        requestAnimationFrame(step)
+    }
+
+    document.querySelector('#executeButton').addEventListener('click', handleExecute)
+</script>
+</body>
+</html>

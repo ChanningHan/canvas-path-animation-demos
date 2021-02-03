@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一条直线的路径动画——思路2</title>
+    <link rel="stylesheet" href="../styles/index.css">
+</head>
+<body>
+<div id="executeButton" onclick="handleExecute()">执行</div>
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<script>
+    function handleExecute() {
+        // 获取canvas元素
+        const canvas = document.querySelector('#myCanvas')
+        // 获取canvas渲染上下文
+        const ctx = canvas.getContext('2d')
+
+        // 定义起点和终点的坐标
+        const startX = 100
+        const startY = 100
+        const endX = 700
+        const endY = 700
+        let nextX
+        let nextY
+
+        // 第一帧执行的时间
+        let startTime;
+        // 期望动画持续的时间
+        const duration = 1000
+
+        // 创建路径
+        ctx.beginPath()
+        // 创建一条子路径,把新的子路径起始点移动到(prevX,prevY)坐标.
+        ctx.moveTo(startX, startY)
+        // 设置线条样式
+        ctx.strokeStyle = `rgba(${81}, ${160}, ${255},${0.25})`
+        ctx.lineWidth = 4
+
+        /*
+        * 动画帧绘制方法.
+        * currentTime是requestAnimation执行回调方法step时会传入的一个执行时的时间(由performance.now()获得).
+        * */
+        const step = (currentTime) => {
+            // ctx.clearRect(startX - 4, startY - 4, Math.abs(endX - startY) + 8, Math.abs(endY - startY) + 8)
+            // 第一帧绘制时记录下开始的时间
+            !startTime && (startTime = currentTime)
+            // 已经过去的时间(ms)
+            const timeElapsed = currentTime - startTime
+            // 动画执行的进度 {0,1}
+            const progress = Math.min(timeElapsed / duration, 1)
+
+            // 绘制方法
+            const draw = () => {
+                // 计算这一帧中线段应该到达的坐标点
+                nextX = startX + (endX - startX) * progress
+                nextY = startY + (endY - startY) * progress
+                // 用直线连接子路径的最后的点到(nextX,nextY)坐标
+                ctx.lineTo(nextX, nextY)
+                // 绘制路径(所有子路径都会被绘制一次)
+                ctx.stroke()
+            }
+            draw()
+
+            if (progress < 1) {
+                requestAnimationFrame(step)
+            } else {
+                console.log('动画执行完毕')
+            }
+        }
+
+        requestAnimationFrame(step)
+    }
+</script>
+</body>
+</html>
