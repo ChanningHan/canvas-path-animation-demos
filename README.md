@@ -52,12 +52,11 @@
 
 
 
-说到定时，首先我们会想到两种方法：**window.setTimeout** 和 **window.setInterval 。**
+说到定时，首先我们会想到两种方法：**window.setTimeout** 和 **window.setInterval** 。
 
 这两种方法当然可以实现我们需要的动画效果，但我并不打算使用它们，也因为有更合适的方法：**window.requestAnimationFrame。**
 
-**
-**
+
 
 如果足够了解JavaScript，你会知道由于其单线程的关系，定时器的实现是在当前任务队列完成后再执行定时器的回调，也就是如果当前队列的执行时间大于定时器设置的时间，那么这个定时器的时间就不是那么靠谱了。
 
@@ -67,11 +66,11 @@
 
 任务队列执行时间较短时：
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611743706708-3f9a3027-1a87-4759-b08a-76467215cc20.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/36d5ca377c6f4ca1a912b2bf04e6e3c5~tplv-k3u1fbpfcp-zoom-1.image)
 
 队列执行时间较长时：
 
-**![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611743688388-439a519f-f2cb-42c9-bacd-6689315ae64b.png)**
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/481c6d593dcf47e68930ad73293b1b9b~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -83,7 +82,7 @@
 
 
 
-requestAnimationFrame提供了更加平缓并且更加有效率的方式来执行动画，当系统准备好了重绘条件时才会调用我们动画帧的绘制方法。
+**requestAnimationFrame**提供了更加平缓并且更加有效率的方式来执行动画，当系统准备好了重绘条件时才会调用我们动画帧的绘制方法。
 
 
 
@@ -105,7 +104,7 @@ requestAnimationFrame的使用可能听上去有点绕，但是不要紧，看�
 
 首先是一条直线的基本绘制方法：
 
-```
+```javascript
 <body>
 <div id="executeButton" onclick="handleExecute()">执行</div>
 <canvas id="myCanvas" width="800" height="800"></canvas>
@@ -134,9 +133,9 @@ requestAnimationFrame的使用可能听上去有点绕，但是不要紧，看�
 
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611886170206-3bdfadee-588a-4db6-8ba2-68402f65ebc3.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/27e8ede322a54971b3558c54b3e9e58b~tplv-k3u1fbpfcp-zoom-1.image)
 
-codepen传送门：https://codepen.io/channinghan/pen/oNYXrjV
+**codepen传送门**：https://codepen.io/channinghan/pen/oNYXrjV
 
 
 
@@ -177,7 +176,7 @@ codepen传送门：https://codepen.io/channinghan/pen/oNYXrjV
 
 progress为**1**时则表示已完成。当progress小于1时继续调用**requestAnimationFrame**来向浏览器请求我们绘制动画帧方法的执行。
 
-```
+```javascript
 <script>
     function handleExecute() {
         // 获取canvas元素
@@ -245,17 +244,17 @@ progress为**1**时则表示已完成。当progress小于1时继续调用**reque
 </script>
 ```
 
-codePen传送门：https://codepen.io/channinghan/pen/wvovGNe
+**codePen传送门**：https://codepen.io/channinghan/pen/wvovGNe
 
 效果图：
 
-![直线路径动画——思路一.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612316865767-68f471ec-f6be-47b3-85d8-96ddba039959.gif)
+![直线路径动画——思路一.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9dce2571d5da4747b164aecfa1178605~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
 #### 第二种：使用同一条路径
 
-```
+```javascript
 <script>
     function handleExecute() {
         // 获取canvas元素
@@ -321,11 +320,11 @@ codePen传送门：https://codepen.io/channinghan/pen/wvovGNe
 </script>
 ```
 
-codepen：https://codepen.io/channinghan/pen/GRNJbqg
+**codepen传送门**：https://codepen.io/channinghan/pen/GRNJbqg
 
 效果图：
 
-![直线路径动画——思路二.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612316926000-317a7be6-66a6-4532-bae1-ceeca97f5f08.gif)
+![直线路径动画——思路二.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/09c37e45e5764112b7f1b10df7828635~tplv-k3u1fbpfcp-zoom-1.image)
 
 ### 加入缓动函数（easing function）
 
@@ -339,11 +338,11 @@ transition:  all 600ms ease-in-out;
 
 那么在我们的直线路径动画中也可以加入缓动函数，而这些缓动函数可以在各种地方找到，这里我用的是**tween.js**中的缓动函数：https://github.com/tweenjs/tween.js/blob/master/src/Easing.ts，
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611975707000-07470ce1-56c9-43f5-b2c8-74e14caf8c5a.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e094c30eade4659b4b655dc471c90b0~tplv-k3u1fbpfcp-zoom-1.image)
 
 其中还有很多缓动函数，而对常用缓动函数也很好理解，**amount**就是对应我们的动画进度**progress**，比如二次方的缓动函数Quadratic.In，就是把返回进度的平方，而基于简单的数学常识，我们直到y=x^2在x的区间[0，1]上的图像是长这样的：
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611976950716-fd661871-2c69-481d-ac6d-4b3a7945077c.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a90d2a62008c4568a29f9f33bb638f8a~tplv-k3u1fbpfcp-zoom-1.image)
 
 可以想象得到，这个动画开始是比较缓慢的，然后越来越快。
 
@@ -359,16 +358,16 @@ Quadratic.Out则几乎相反，先快后慢。
 
 那么，在我们的这一条直线的例子中，使用缓动函数也非常简单，progress就是缓动函数中的amount参数，把缓动函得到的结果理解为一个**计算属性**,替代我们原来直接的progress即可：
 
-```
+```javascript
 let progress = Math.min(timeElapsed / duration, 1)
 progress = Easing.Quadratic.In(progress)
 ```
 
-codepen传送门：https://codepen.io/channinghan/pen/bGBGQym
+**codepen传送门**：https://codepen.io/channinghan/pen/bGBGQym
 
 效果图：
 
-![直线+缓动函数.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1611990369162-f2179a66-3ff3-4a68-9a3b-bdf63fbb62bf.gif)
+![直线+缓动函数.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5017f99bd21f4fbd8dd467153f79c6a3~tplv-k3u1fbpfcp-zoom-1.image)
 
 ### 在虚线中观察帧动画
 
@@ -380,7 +379,7 @@ codepen传送门：https://codepen.io/channinghan/pen/bGBGQym
 
 为了更清晰地直观看到requestAniamtionFrame的调用，基于第一种方法，用一个**count**变量记录调用次数，且count为**奇数**时不进行绘制，以此形成**虚线**：
 
-```
+```javascript
 <script>
     function handleExecute() {
         // ......
@@ -428,13 +427,13 @@ codepen传送门：https://codepen.io/channinghan/pen/bGBGQym
 </script>
 ```
 
-codepen传送门：https://codepen.io/channinghan/pen/poNoyGV
+**codepen传送门**：https://codepen.io/channinghan/pen/poNoyGV
 
-效果图：![虚线路径动画.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612317106316-32c6d541-ebaf-4af3-81e5-48f2ae80c184.gif)
+效果图：![虚线路径动画.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6eac3e2a01ab4c0f9c0c300d8fccc8fa~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1611884194075-4087b90c-15f8-4cbf-a75d-4b97960258ae.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0ccef49f38e549abb4966fc74f5b5a08~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -450,13 +449,13 @@ codepen传送门：https://codepen.io/channinghan/pen/poNoyGV
 
 拆分的方法可能有多种，这里放上我的一种实现。
 
-codepen：https://codepen.io/channinghan/pen/yLVNdVP
+**codepen传送门**：https://codepen.io/channinghan/pen/yLVNdVP
 
 效果图：
 
-![折线路径动画.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612149619960-93a8fd43-e1fd-43ec-9d16-12e5870131ac.gif)
+![折线路径动画.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f88680894143414c94f1020301b85953~tplv-k3u1fbpfcp-zoom-1.image)
 
-```
+```javascript
  function handleExecute() {
         const canvas = document.querySelector('#myCanvas')
         const ctx = canvas.getContext('2d')
@@ -545,7 +544,7 @@ codepen：https://codepen.io/channinghan/pen/yLVNdVP
 
 值得一提的是，当前线段的进度计算方法是：
 
-```
+```javascript
 const partProgress = (progress - (lineIndex - 1) * partProportion) / partProportion
 ```
 
@@ -575,19 +574,19 @@ const partProgress = (progress - (lineIndex - 1) * partProportion) / partProport
 
 圆的路径动画实现思路就是每个动画帧绘制其中一个**角度范围**的**圆弧**。
 
-codepen传送门：https://codepen.io/channinghan/pen/poNJXed
+**codepen传送门**：https://codepen.io/channinghan/pen/poNJXed
 
 效果图：
 
 
 
-![圆.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612239394149-3024b96e-c891-4d9c-9870-fdb992499fc1.gif)
+![圆.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/31ca35d6fb5f429bbff696d48af7692d~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
 核心代码：
 
-```
+```javascript
  function handleExecute() {
         // 获取canvas元素
         const canvas = document.querySelector('#myCanvas')
@@ -656,7 +655,7 @@ codepen传送门：https://codepen.io/channinghan/pen/poNJXed
 
 关键的其实就只有这么一行：
 
-```
+```javascript
 // 计算这一帧中圆弧应该到达的角度
                 nextAngle = startAngle + (endAngle - startAngle) * progress
 ```
@@ -667,11 +666,11 @@ codepen传送门：https://codepen.io/channinghan/pen/poNJXed
 
 说到圆，很难不想到圆弧，然后你可能就会想起一位**名人**....
 
-![优弧.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612258384128-2ae8a972-a2f3-4864-a7cd-a763200721a4.gif)
+![优弧.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ed0b6c07e4fa4e54bebca8ba2bfa6325~tplv-k3u1fbpfcp-zoom-1.image)
 
 gif有点掉帧了
 
-codepen传送门：https://codepen.io/channinghan/pen/ExNjBmd
+**codepen传送门**：https://codepen.io/channinghan/pen/ExNjBmd
 
 ## 贝塞尔曲线
 
@@ -722,7 +721,7 @@ canvas中有**二次**和**三次****贝塞尔曲线**，本身使用它有一�
 
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1612260043828-89641afc-c077-4b77-98ac-f7a6f8c49649.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/08b49d869a3d4877adb84b56e2d6dee9~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -762,20 +761,20 @@ canvas中有**二次**和**三次****贝塞尔曲线**，本身使用它有一�
 
 然后就是格物致知，当你看了若干次这个动图之后，会产生这么一种**直觉**：
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1612313658388-e719fb23-2b59-41ae-aa6a-617bcdc371ad.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ebca647e5b59453d86b183f65ad779e1~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
 子控制点就在**P0-P1**这条线段上，并且其位置与我们的进度**progress**相关，现在我们大胆假设：
 
-```
+```javascript
 sc.x = p0.x + p1.x - p0.x
 sc.y = p0.y + p1.y - p0.y
 ```
 
 然后小心求证，用具体代码实现它看看：
 
-```
+```javascript
 function handleExecute() {
 
         // 计算出子控制点的坐标
@@ -885,15 +884,15 @@ function handleExecute() {
 
 核心就是提取了两个计算方法calcB和calSC用于计算并更新子贝塞尔曲线的终点和子控制点，然后使用贝塞尔曲线的绘制api：
 
-```
+```javascript
 ctx.quadraticCurveTo(SC.x, SC.y, B.x, B.y)
 ```
 
-codepen传送门：https://codepen.io/channinghan/pen/eYBNwRK
+**codepen传送门**：https://codepen.io/channinghan/pen/eYBNwRK
 
 在执行动画前，我先将完整的贝塞尔曲线用灰色线条绘制出来，再执行动画看看能不能准确覆盖上以检验我们的动画方法是否正确：
 
-![二次贝塞尔曲线.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612276841001-2a82d8cd-bbb8-4861-9022-41b81bc7aaf4.gif)
+![二次贝塞尔曲线.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f1b8b5c8c817401eba35f8096759f82d~tplv-k3u1fbpfcp-zoom-1.image)
 
 god bless🙏
 
@@ -904,7 +903,7 @@ god bless🙏
 对于三次贝塞尔曲线，老样子还是先看它的动图：
 
 
-![image](https://cdn.nlark.com/yuque/0/2021/jpeg/2359237/1612278130292-be16745e-fa75-4394-82ac-4001ed2e8a17.jpeg)
+![image](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc07705955394a038147494a560991cb~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -912,13 +911,13 @@ god bless🙏
 
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1612313892352-1103e918-5ebd-41af-bded-346f6f30b6c7.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7594e250731e446b98e1508e09ce1ef4~tplv-k3u1fbpfcp-zoom-1.image)
 
 那么我们只需要添加**SC1**、**SC2**、**SC3**和修改**B**坐标的计算方法即可，其中SC1、SC2为**子控制点**，SC3用于计算出SC2的坐标。
 
 这些点的计算方法为：
 
-```
+```javascript
 // 计算出子控制点1的坐标
         function calSC1(t) {
             SC1.x = p0.x + (p1.x - p0.x) * t
@@ -946,7 +945,7 @@ god bless🙏
 
 帧动画中的核心方法：
 
-```
+```javascript
 ctx.beginPath()
 ctx.moveTo(p0.x, p0.y)
 // 计算并更新B和SC1、SC2、SC3的坐标
@@ -962,11 +961,11 @@ ctx.stroke()
 
 其余跟二次贝塞尔曲线的路径动画差不多了。
 
-codepen传送门：https://codepen.io/channinghan/pen/wvoaLqg
+**codepen传送门**：https://codepen.io/channinghan/pen/wvoaLqg
 
 让我们再次验证一下三次贝塞尔曲线的路径动画：
 
-![三次贝塞尔曲线.gif](https://cdn.nlark.com/yuque/0/2021/gif/2359237/1612314519136-8859d91b-2ae7-42e4-97d3-8f64946b384f.gif)
+![三次贝塞尔曲线.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5dbde405cbc641c4a8187fdad48db9e7~tplv-k3u1fbpfcp-zoom-1.image)
 
 god bless again🙏
 
@@ -974,7 +973,7 @@ god bless again🙏
 
 其实我也不是一次就成功，当子控制点选得不对就会出现一些有趣的现象：
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2359237/1612314660511-6d487378-68d3-4a97-ab49-b70e2323d2bb.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/26f30bf74fb64ccfb0a4c791a272f712~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
