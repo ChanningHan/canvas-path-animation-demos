@@ -992,6 +992,6 @@ god bless again🙏
 >
 > 当然，文中或许会存在不足、错误之处，非常欢迎大家在**评论**里与我交流。
 >
-> 文中所用的所有**Demo**都已放在：**[GitHub传送门](https://github.com/ChanningHan/talk-about-vue3)**。
+> 文中所用的所有**Demo**都已放在：**[GitHub传送门](https://github.com/ChanningHan/canvas-path-animation-demos)**。
 >
 > 最后，希望朋友们可以**点赞、评论、关注**三连，这些就是我分享的全部动力来源🙏
